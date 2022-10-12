@@ -12,11 +12,27 @@ if (isset($_GET['logout'])) {
 }
 
 Authentication::authenticate();
+require('./ajax-handler.php');
 
 ?><!doctype html>
 <html lang='en'>
 	<head>
 		<title>samltools</title>
+		<script>
+// a button clicked, json data sent, when received puts in result
+function sendRequest(function) {
+	let data = {"function": function };
+	let xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if ((xhr.readyState == 4) && (xhr.status == 200))
+		{
+			let Response = JSON.parse(xhr.responseText);
+		}
+	};
+	xhr.open('POST', 'ajax-handler.php', true);
+	xhr.send(JSON.stringify(data));
+}
+		<script>
 	</head>
 	<body>
 		<div>
