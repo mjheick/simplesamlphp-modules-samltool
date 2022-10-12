@@ -1,4 +1,5 @@
 <?php
+use SimpleSAML\Module\samltool\Authentication;
 /* so we don't get called without authorization */
 Authentication::authenticate();
 

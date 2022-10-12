@@ -12,7 +12,7 @@ if (isset($_GET['logout'])) {
 }
 
 Authentication::authenticate();
-require('./ajax-handler.php');
+require('ajax-handler.php');
 
 ?><!doctype html>
 <html lang='en'>
