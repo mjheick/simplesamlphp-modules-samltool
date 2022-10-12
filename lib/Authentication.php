@@ -3,6 +3,7 @@
 namespace SimpleSAML\Module\samltool;
 
 use SimpleSAML\Module;
+use SimpleSAML\Auth\Simple;
 
 class Authentication {
 	/* @var array loaded private configuration */
@@ -36,12 +37,28 @@ class Authentication {
 		self::getConfig();
 		if (!is_null(self::$config['authentication']))
 		{
+			$as = new Simple(self::$config['authentication']);
+			$as->requireAuth();
 		}
-
 		if (isset(self::$config['whitelist']) && count(self::$config['whitelist']) > 0)
 		{
 			$ip = self::getIPAddress();
 			self::http401();
+		}
+	}
+
+	public static function logout()
+	{
+		self::getConfig();
+		if (isset(self::$config['whitelist']) && count(self::$config['whitelist']) > 0)
+		{
+			$ip = self::getIPAddress();
+			self::http401();
+		}
+		if (!is_null(self::$config['authentication']))
+		{
+			$as = new Simple(self::$config['authentication']);
+			$as->logout(['ReturnTo' => Module::getModuleURL('samltool/index.php')]);
 		}
 	}
 
@@ -70,7 +87,7 @@ class Authentication {
 	/**
 	 * Throw a 401 and terminate
 	 */
-	private static function http401(): void
+	private static function http401()
 	{
 		header('HTTP/1.1 401 Unauthorized');
 		exit;
